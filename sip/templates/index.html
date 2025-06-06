@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ET Money Mutual Fund Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: white;
+            margin: 10px auto;
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>ET Money Mutual Fund Data</h2>
+    <button onclick="fetchData()">Fetch Data</button>
+    <ul id="mf-list">
+        <!-- Data will be inserted here -->
+    </ul>
+
+    <script>
+        function fetchData() {
+            fetch("http://127.0.0.1:5000/fetch-mf-data")
+                .then(response => response.json())
+                .then(data => {
+                    const list = document.getElementById("mf-list");
+                    list.innerHTML = ""; // Clear previous data
+                    data.data.forEach(item => {
+                        const li = document.createElement("li");
+                        li.textContent = item;
+                        list.appendChild(li);
+                    });
+                })
+                .catch(error => console.error("Error fetching data:", error));
+        }
+    </script>
+
+</body>
+</html>
