@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIC Policies</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .policy-category {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .policy-category h3 {
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+        .policy-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .policy-list li {
+            margin: 5px 0;
+        }
+        .policy-list a {
+            text-decoration: none;
+            color: #333;
+        }
+        .policy-list a:hover {
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>LIC Policies</h1>
+    <button id="fetchPolicies">Show Policies</button>
+    
+    <div id="policyContainer"></div>
+
+    <script>
+        $(document).ready(function(){
+            $("#fetchPolicies").click(function(){
+                $.getJSON("/lic_policies", function(data){
+                    $("#policyContainer").html(""); // Clear existing content
+                    if (data.error) {
+                        $("#policyContainer").html("<p style='color:red;'>" + data.error + "</p>");
+                        return;
+                    }
+
+                    $.each(data, function(category, policies){
+                        let categoryDiv = $("<div class='policy-category'></div>");
+                        categoryDiv.append("<h3>" + category + "</h3>");
+                        let policyList = $("<ul class='policy-list'></ul>");
+
+                        $.each(policies, function(index, policy){
+                            let listItem = $("<li></li>");
+                            let link = $("<a></a>").attr("href", policy.link).attr("target", "_blank").text(policy.title);
+                            listItem.append(link);
+                            policyList.append(listItem);
+                        });
+
+                        categoryDiv.append(policyList);
+                        $("#policyContainer").append(categoryDiv);
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
