@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Rates</title>
+    <script>
+        function fetchGoldRates() {
+            fetch('/get_gold_rates')
+            .then(response => response.json())
+            .then(data => {
+                let tableBody = document.getElementById("goldRatesTableBody");
+                tableBody.innerHTML = "";
+                data.forEach(rate => {
+                    let row = `<tr>
+                        <td>${rate.city}</td>
+                        <td>${rate.gold_22k}</td>
+                        <td>${rate.gold_24k}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Gold Rates in India</h1>
+    <button onclick="fetchGoldRates()">Get Latest Rates</button>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>City</th>
+                <th>22K Gold Rate (8g)</th>
+                <th>24K Gold Rate (8g)</th>
+            </tr>
+        </thead>
+        <tbody id="goldRatesTableBody"></tbody>
+    </table>
+</body>
+</html>
