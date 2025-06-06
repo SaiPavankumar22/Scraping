@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Office Policies</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .policy-title {
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            background: #f4f4f4;
+            border-bottom: 1px solid #ddd;
+        }
+        .policy-content {
+            display: none;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Post Office Policies</h1>
+    <button id="loadPolicies">Load Policies</button>
+    <div id="policiesContainer"></div>
+
+    <script>
+        $(document).ready(function() {
+            $("#loadPolicies").click(function() {
+                $.getJSON("/policies", function(data) {
+                    let container = $("#policiesContainer");
+                    container.empty();
+                    if (data.error) {
+                        container.append("<p>Error fetching policies</p>");
+                    } else {
+                        data.forEach(policy => {
+                            let policyDiv = $(`
+                                <div>
+                                    <div class="policy-title">${policy.title}</div>
+                                    <div class="policy-content">${policy.content}</div>
+                                </div>
+                            `);
+                            policyDiv.find(".policy-title").click(function() {
+                                $(this).next(".policy-content").toggle();
+                            });
+                            container.append(policyDiv);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
